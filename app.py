@@ -205,12 +205,7 @@ app.layout = html.Div([
 ])
 
 
-@app.callback(
-    [
-        Input("names_drop", "value"),
-       
-    ]
-)
+
 
 
 
