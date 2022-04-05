@@ -2,6 +2,10 @@ body {
     background-color: rgb(30,30,30);
     font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 0.8rem;
-    text-align: center;
     color: #ededed;
+}
+
+#left_column_drivers {
+    width: 25%;
+    float:left;
 }

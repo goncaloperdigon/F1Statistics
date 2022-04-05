@@ -66,29 +66,41 @@ status =pd.read_csv('f1db_csv/status.csv')
 #    pit stop mais rapido (equipa)
 # pilotos com mais vitorias e campeonatos
 # equipas com mais vitorias e campeonatos
-# 
+# por piloto
+#
      
 
 #DADOS
 fullnames = drivers['forename'] + str(" ") + drivers['surname']
 pilot_names = [dict(label=fullname, value=fullname) for fullname in fullnames]
 
+encoded_image = base64.b64encode(open('images/avatar.png', 'rb').read())
+
+#INTERACTIVE PARTS
 dropdown_names = dcc.Dropdown(
         id='names_drop',
         options= pilot_names,
         multi=True
     )
     
-    
+#LAYOUT   
 app = dash.Dash(__name__, assets_folder='style')
 
 server = app.server
 
 app.layout = html.Div([
 
-   html.Label('bjabsjas'),
-    dropdown_names
-])
+   html.H1('F1 STATISTICS'), 
+    
+   ]),
+
+   html.Div([
+       
+       html.Label('Drivers'),
+       dropdown_names,
+       html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()), id='logo')
+       
+   ], id = 'left_column_drivers')
 
 
 
