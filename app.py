@@ -50,120 +50,6 @@ sprint_results =pd.read_csv('f1db_csv/sprint_results.csv')
 status =pd.read_csv('f1db_csv/status.csv')
 
 
-# ### Circuits
-
-# In[4]:
-
-
-circuits.head()
-
-
-# ### Constructor results
-
-# In[5]:
-
-
-constructor_results.head()
-
-
-# ### Contrusctor standings
-
-# In[6]:
-
-
-constructor_standings.head()
-
-
-# ### Constructors
-
-# In[7]:
-
-
-constructors.head()
-
-
-# ### Driver standings
-
-# In[8]:
-
-
-driver_standings.head()
-
-
-# ### Drivers
-
-# In[9]:
-
-
-drivers.head()
-
-
-# ### Lap times
-
-# In[10]:
-
-
-lap_times.head()
-
-
-# ### Pit Stops
-
-# In[11]:
-
-
-pit_stops.head()
-
-
-# ### Qualifying
-
-# In[12]:
-
-
-qualifying.head()
-
-
-# ### Races
-
-# In[13]:
-
-
-races.head()
-
-
-# ### Results
-
-# In[14]:
-
-
-results.head()
-
-
-# ### Seasons
-
-# In[15]:
-
-
-seasons.head()
-
-
-# ### Sprint results
-
-# In[16]:
-
-
-sprint_results.head()
-
-
-# ### Status
-
-# In[17]:
-
-
-status.head()
-
-
-# In[18]:
-
 
 # Visualizaçoes que vamos fazer
 # por circuito:
@@ -184,12 +70,11 @@ status.head()
      
 
 #DADOS    
-pilot_names = [dict(label=surname, value=surname) for surname in drivers['surname'].unique()]
+pilot_names = [dict(label=fullname, value=fullname) for forename,surname in zip(drivers['forename'], drivers['surname'])]
 
 dropdown_names = dcc.Dropdown(
         id='names_drop',
         options=pilot_names,
-        value=['Portugal'],
         multi=True
     )
     
