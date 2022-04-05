@@ -11,13 +11,12 @@ body {
 }
 
 #avatar{
-    width: 50%;
-    height: 50%;
+    width: 200px;
+    height: 300px;
 
 }
 
-#left_column_drivers{
-    width: 25%;
-    
+#driver_dd{
+    width: 100px;
 }
 
