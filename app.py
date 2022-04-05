@@ -78,11 +78,6 @@ pilot_names = [dict(label=fullname, value=fullname) for fullname in fullnames]
 encoded_image = base64.b64encode(open('images/avatar.png', 'rb').read())
 
 #INTERACTIVE PARTS
-dropdown_names = dcc.Dropdown(
-        id='names_drop',
-        options= pilot_names,
-        multi=True
-    )
     
 #LAYOUT   
 app = dash.Dash(__name__, assets_folder='style')
@@ -91,16 +86,22 @@ server = app.server
 
 app.layout = html.Div([
 
-       html.Div([
+       
     
        html.H1('F1 STATISTICS', id = 'title'), 
                
        html.Label('Drivers'),
        html.Br(),
-       dropdown_names(id = "driver_dd"),
+       dcc.Dropdown(
+        id='names_drop',
+        options= pilot_names,
+        value=[],
+        multi=True
+        style={'backgroundColor': 'rgb(218,218,218)', 'color': 'black', 'font-size': '13px'}
+    ),
        html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()), id='avatar')
        
-       ])
+      
     
 ])
 
