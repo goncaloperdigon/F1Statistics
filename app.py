@@ -186,7 +186,12 @@ status.head()
 #DADOS    
 pilot_names = [dict(label=surname, value=surname) for surname in drivers['surname'].unique()]
 
-    
+dropdown_names = dcc.Dropdown(
+        id='names_drop',
+        options=pilot_names,
+        value=['Portugal'],
+        multi=True
+    )
     
     
 app = dash.Dash(__name__, assets_folder='style')
@@ -195,27 +200,17 @@ server = app.server
 
 app.layout = html.Div([
 
-    # Div 1. - Title, Top Winners, Top countries, Filter, Search
-    html.Div([
-
-        # Div 1.1. - Title
-        html.Div([
-            html.P('Olympic Games'),
-            html.P('Summer', id='p2'),
-            #html.Img(src=app.get_asset_url( '/images/Olympic-logo.png')),
-
-        ], id='title', className='title leftboxes'
-        ),  # end div 1.1.
-    ])
+   html.Label('bjabsjas'),
+    dropdown_names
 ])
 
-dropdown_country = dcc.Dropdown(
-        id='names_drop',
-        options=pilot_names,
-        value=['Portugal'],
-        multi=True
-    )
 
+@app.callback(
+    [
+        Input("names_drop", "value"),
+       
+    ]
+)
 
 
 
