@@ -210,8 +210,8 @@ app.layout = html.Div([
 ])
 
 dropdown_country = dcc.Dropdown(
-        id='country_drop',
-        options=country_options,
+        id='names_drop',
+        options=pilot_names,
         value=['Portugal'],
         multi=True
     )
