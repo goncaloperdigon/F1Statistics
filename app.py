@@ -94,14 +94,14 @@ app.layout = html.Div([
    
        html.H1('F1 STATISTICS', id = 'title'), 
         
-    html.Div([
+    
         
        html.Label('Drivers'),
        html.Br(),
        dropdown_names,
        html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()), id='avatar')
         
-    ], id = "left_column_drivers")
+    
 ])
 
 
