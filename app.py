@@ -90,17 +90,14 @@ server = app.server
 
 app.layout = html.Div([
 
-   html.H1('F1 STATISTICS'), 
-    
-   ]),
-
-   html.Div([
-       
+   
+       html.H1('F1 STATISTICS'), 
+          
        html.Label('Drivers'),
        dropdown_names,
        html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()), id='logo')
        
-   ], id = 'left_column_drivers')
+   ])
 
 
 
