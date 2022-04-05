@@ -96,7 +96,7 @@ app.layout = html.Div([
         id='names_drop',
         options= pilot_names,
         value=[],
-        multi=True
+        multi=True,
         style={'backgroundColor': 'rgb(218,218,218)', 'color': 'black', 'font-size': '13px'}
     ),
        html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()), id='avatar')
