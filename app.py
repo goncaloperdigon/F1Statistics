@@ -70,7 +70,7 @@ status =pd.read_csv('f1db_csv/status.csv')
      
 
 #DADOS    
-pilot_names = [dict(label=fullname, value=fullname) for forename,surname in zip(drivers['forename'], drivers['surname'])]
+pilot_names = [dict(label=forename, value=surname) for forename,surname in zip(drivers['forename'], drivers['surname'])]
 
 dropdown_names = dcc.Dropdown(
         id='names_drop',
