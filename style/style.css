@@ -5,3 +5,19 @@ body {
     color: #ededed;
 }
 
+#title{
+    text-align: center;
+    font-size: 48px;
+}
+
+#avatar{
+    width: 50%;
+    height: 50%;
+
+}
+
+#left_column_drivers{
+    width: 25%;
+    
+}
+
