@@ -11,12 +11,21 @@ body {
 }
 
 #avatar{
-    width: 200px;
-    height: 300px;
+    width: 30%;
+    height: 30%;
 
 }
 
 #names_drop{
-    width: 100px;
+    width: 400px;
 }
 
+#left_column_drivers{
+    margin-left: 20px;
+    font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#drivers_title{
+    margin-bottom: 10px;
+    font-size: 20px;
+}

@@ -86,23 +86,26 @@ server = app.server
 
 app.layout = html.Div([
 
-       
+       html.Div([
     
        html.H1('F1 STATISTICS', id = 'title'), 
                
-       html.Label('Drivers'),
+       html.Label('Drivers', id = 'drivers_title'),
        html.Br(),
        dcc.Dropdown(
         id='names_drop',
         options= pilot_names,
         value=[],
-        multi=True,
-        style={'backgroundColor': 'rgb(218,218,218)', 'color': 'black', 'font-size': '13px'}
+        multi=True
     ),
        html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()), id='avatar')
        
-      
+    ], id = 'left_column_drivers'),
     
+    html.Div([
+    
+    ])    
+        
 ])
 
 
