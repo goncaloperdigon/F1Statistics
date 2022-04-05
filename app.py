@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
 
 
 import dash
@@ -19,7 +18,7 @@ import plotly.graph_objects as go
 
 # ## Import datasets
 
-# In[3]:
+
 
 
 circuits =pd.read_csv('f1db_csv/circuits.csv')
@@ -183,13 +182,13 @@ status.head()
 # equipas com mais vitorias e campeonatos
 # 
      
+
+#DADOS    
+pilot_names = [dict(label=surname, value=surname) for surname in drivers['surname'].unique()]
+
     
-
-
-# In[19]:
-
-
-
+    
+    
 app = dash.Dash(__name__, assets_folder='style')
 
 server = app.server
@@ -210,8 +209,13 @@ app.layout = html.Div([
     ])
 ])
 
+dropdown_country = dcc.Dropdown(
+        id='country_drop',
+        options=country_options,
+        value=['Portugal'],
+        multi=True
+    )
 
-# In[ ]:
 
 
 
