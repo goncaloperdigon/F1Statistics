@@ -8,24 +8,58 @@ body {
 #title{
     text-align: center;
     font-size: 48px;
+    float:right;
+    margin-right: 450px
 }
 
 #avatar{
-    width: 30%;
-    height: 30%;
+    width: 50%;
+    height: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 
 }
 
+#logo{
+    width: 25%;
+    height: 80%;
+    float:left;
+    margin-left: 400px;
+
+}
+
+#div_title{
+    height:150px;
+}
+
 #names_drop{
-    width: 400px;
+    width: 500px;
+    color: black;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #left_column_drivers{
     margin-left: 20px;
     font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    float:left
+}
+
+#right_column_drivers{
+    font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    float:right
 }
 
 #drivers_title{
     margin-bottom: 10px;
     font-size: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#driver_stats_graph{
+    margin-right: 100px;
+    height: 400px;
+
 }

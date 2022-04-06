@@ -12,6 +12,7 @@ import numpy as np
 import base64
 
 
+
 from dash.dependencies import Input, Output
 import numpy as np
 import plotly.graph_objects as go
@@ -73,9 +74,11 @@ status =pd.read_csv('f1db_csv/status.csv')
 
 #DADOS
 fullnames = drivers['forename'] + str(" ") + drivers['surname']
-pilot_names = [dict(label=fullname, value=fullname) for fullname in fullnames]
+pilot_names = [dict(label=fullname, value=driver_id) for fullname, driver_id in zip(fullnames, drivers['driverId'])]
 
-encoded_image = base64.b64encode(open('images/avatar.png', 'rb').read())
+encoded_image_avatar = base64.b64encode(open('images/avatar.png', 'rb').read())
+encoded_image_logo = base64.b64encode(open('images/f1_logo.png', 'rb').read())
+
 
 #INTERACTIVE PARTS
     
@@ -87,28 +90,95 @@ server = app.server
 app.layout = html.Div([
 
        html.Div([
-    
-       html.H1('F1 STATISTICS', id = 'title'), 
-               
-       html.Label('Drivers', id = 'drivers_title'),
+
+           html.Img(src='data:image/png;base64,{}'.format(encoded_image_logo.decode()), id='logo'),
+
+           html.H1('STATISTICS', id = 'title'),
+
+        ], id = 'div_title'),
+
+
+        html.Div([
+
+        html.H5('Choose your driver', id = 'drivers_title'),
+
        html.Br(),
+
        dcc.Dropdown(
         id='names_drop',
         options= pilot_names,
-        value=[],
-        multi=True
+        value=1,
+        multi=False
     ),
-       html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()), id='avatar')
+       html.Img(src='data:image/png;base64,{}'.format(encoded_image_avatar.decode()), id='avatar')
        
     ], id = 'left_column_drivers'),
     
     html.Div([
-    
-    ])    
-        
+
+    dcc.Graph(
+        id='driver_stats_graph',
+
+    )
+
+    ], id = 'right_column_drivers')
 ])
 
+@app.callback(
+    Output(component_id='driver_stats_graph', component_property='figure'),
+    [Input(component_id='names_drop', component_property='value')]
+)
+def update_driver_info(driver):
 
+    fig = go.Figure(go.Bar(
+        x=[len(qualifying.loc[(qualifying['position'] == 1) & (qualifying['driverId'] == driver)]),
+           len(results.loc[(results['position'] == '1') & (results['driverId'] == driver)]),
+           len(results.loc[results['driverId'] == driver])],
+        y=[ 'Total Pole Postions','Total Wins', 'Total Number of Races'],
+        marker=dict(
+            color='rgba(222, 83, 83, 0.8)',
+            line=dict(color='rgba(138, 8, 8, 0.8)', width=3)),
+        orientation='h'))
+
+    fig.layout.plot_bgcolor = 'rgb(30,30,30)'
+    fig.layout.paper_bgcolor = 'rgb(30,30,30)'
+
+    fig.update_layout(
+        xaxis=dict(
+            showgrid=False,
+            showline=False,
+            showticklabels=True,
+            zeroline=False,
+            range=[0, 400],
+            tickfont=dict(
+                family='Arial',
+                size=13,
+                color='white',
+            ),
+
+        ),
+        yaxis=dict(
+            showgrid=False,
+            showline=False,
+            showticklabels=True,
+            zeroline=False,
+            tickfont=dict(
+                family='Arial',
+                size=18,
+                color='white',
+            ),
+        ),
+        margin=dict(
+            pad=20
+        ),
+        showlegend=False,
+    )
+
+    return go.Figure(data=fig)
+
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
 
 
 
