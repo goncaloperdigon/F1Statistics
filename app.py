@@ -685,9 +685,9 @@ def update_season_circuit(season,circuit):
     return go.Figure(data=fig)
 
 
-
-if __name__ == '__main__':
-    app.run_server(debug=True)
+#
+#if __name__ == '__main__':
+#    app.run_server(debug=True)
 
 
 
