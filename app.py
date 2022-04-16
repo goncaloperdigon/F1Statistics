@@ -6,14 +6,10 @@
 import dash
 from dash import dcc
 from dash import html
-import plotly.graph_objects as go
 import pandas as pd
-import numpy as np
 import base64
 import datetime as dt
 import plotly.express as px
-
-
 
 from dash.dependencies import Input, Output
 import numpy as np
@@ -21,9 +17,6 @@ import plotly.graph_objects as go
 
 
 # ## Import datasets
-
-
-
 
 fpath = 'f1db_csv/'
 circuits = pd.read_csv(f'{fpath}circuits.csv', index_col=0, na_values=r'\N')
@@ -686,8 +679,8 @@ def update_season_circuit(season,circuit):
 
 
 #
-#if __name__ == '__main__':
-#    app.run_server(debug=True)
+if __name__ == '__main__':
+    app.run_server(debug=True)
 
 
 
