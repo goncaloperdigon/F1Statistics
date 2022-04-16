@@ -102,15 +102,89 @@ newLapTimes = pd.merge(newLapTimes,newResults[['raceId','driverId','driverName',
 results_status = pd.merge(results.loc[(results['statusId'] ==  3) | (results['statusId'] ==  4)],races,left_on='raceId',right_index=True,how='left')
 results_status = pd.merge(results_status,circuits,left_on='circuitId',right_index=True,how='left')
 results_status.rename(columns={'circuitCountry':'Country'},inplace = True)
+
+results_status['Country'].loc[results_status['Country'] == 'USA'] = 'United States'
+results_status['Country'].loc[results_status['Country'] == 'UAE'] = 'United Arab Emirates'
+results_status['Country'].loc[results_status['Country'] == 'UK'] = 'United Kingdom'
+results_status['Country'].loc[results_status['Country'] == 'Russia'] = 'Russian Federation'
+results_status['Country'].loc[results_status['Country'] == 'China'] = 'China, People\'s Republic of'
+results_status['Country'].loc[results_status['Country'] == 'Korea'] = 'Korea, Republic of (South)'
+
+results_status_GP = results_status.groupby(['circuitLocation','Country']).count()
 results_status = results_status.groupby('Country').count()
+
 results_status = pd.merge(results_status,iso,left_on='Country',right_on='Country',how='left')
 
+results_status = results_status.drop_duplicates().reset_index()
+results_status_GP = results_status_GP.drop_duplicates().reset_index()
+
+top_5_accidents = results_status_GP.loc[results_status_GP.index.isin(results_status_GP['raceId'].nlargest(5).index)].sort_values(by='raceId', ascending=False)
+
+
+#TOP 5 CIRCUITS BY ACCIDENTS
+
+table_accidents = go.Table(
+        header=dict(
+            values=["Circuit ","Country","Total Number of accidents"],
+            line_color=['black'],
+            fill_color=['rgb(128,128,128)', 'rgb(128,128,128)', 'rgba(138, 8, 8, 0.8)'],
+            align='center',
+            font=dict(color=['black'], size=15),
+        ),
+        cells=dict(
+            values=[top_5_accidents.circuitLocation,top_5_accidents.Country , top_5_accidents.raceId,],
+            line_color='black', fill_color='rgb(43, 43, 43)',
+            align=['center','center'], font=dict(color='white', size=14),
+            height= 25
+        )
+    )
+layout_table = dict(
+        showlegend=False,
+        plot_bgcolor='black',
+        paper_bgcolor='black',
+        autosize=False,
+        margin=dict(autoexpand=False, l=10, r=10, t=10, b=5),
+        width = 600
+    )
+
+table_top5_accidents= go.Figure(data=table_accidents, layout=layout_table)
+
+table_top5_accidents.update_layout({
+        'plot_bgcolor': 'rgba(0, 0, 0, 0)',
+        'paper_bgcolor': 'rgba(0, 0, 0, 0)',
+    })
+
+
+#CHOROPLETH ACCIDENTS
 fig_accidents = px.choropleth(results_status, locations='ISO', color='statusId',
                            color_continuous_scale = 'reds',
                            range_color=(0, 160),
-                           labels={'accidents':'number of accidents'}
-                          )
-fig_accidents.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+                           labels={'statusId':'Number of Accidents'},
+                           hover_name= 'Country'
+                              )
+fig_accidents.layout.plot_bgcolor = 'rgb(18,19,20)'
+fig_accidents.layout.paper_bgcolor = 'rgb(18,19,20)'
+
+fig_accidents.update_geos(
+    showcoastlines=True, coastlinecolor='rgb(43, 43, 43)',
+    showland=True, landcolor='rgb(43, 43, 43)',
+    showocean=True, oceancolor='rgb(30, 30, 30)',
+    showlakes=True, lakecolor='rgb(30, 30, 30)',
+    showframe=False,
+)
+
+
+fig_accidents.update_layout(margin={"r":10,"t":0,"l":10,"b":0},
+                            coloraxis_colorbar=dict(
+                                title=dict(text ="Number of Accidents",font = dict(color = 'white')),
+                                yanchor="top", y=1,
+                                ticks="inside",
+                                tickfont = dict(color = 'white')
+                            ),
+                            dragmode = False,
+                            coloraxis_colorbar_x=-0.12
+                            )
+
 
 seasons = [dict(label=year, value=year1) for year, year1 in zip(newLapTimes['year'].sort_values().unique(), newLapTimes['year'].sort_values().unique())]
 circuits = [dict(label=name, value=id) for name, id in zip(newLapTimes['circuitLocation'].unique(), newLapTimes['circuitId'].unique())]
@@ -190,13 +264,25 @@ app.layout = html.Div([
     html.Hr(style = {'width':'80%',
                      'margin-bottom':'50px'}),
 
-    html.H1('Select your teams', id = 'title_teams'),
+        html.H1('Top 5 circuits with most accidents', style={'margin-left': '60%'}),
 
-    html.Div([
+        html.H1('Select your teams', id = 'title_teams'),
+        html.Div([
+            dcc.Graph(figure=table_top5_accidents, style = {'margin-left':'50px','float':'left'}),
+
+        ], style={'width': '50%',
+                  'float': 'right',
+                  'height':'200px',
+
+                  },
+
+        ),
+
+        html.Div([
     dcc.Dropdown(
         id='team_a_drop',
         options= constructor_names,
-        value=5,
+        value=1,
         multi=False
     ),
 
@@ -212,14 +298,18 @@ app.layout = html.Div([
         options= team_options,
         value= 'PitStop',
         multi=False
-    )
+    ),
+    html.Br(),
+    html.Br(),
+    html.H4("Note: Average pit stop time is only available from 2011 onwards"),
+
+
 
     ], id = "div_dd_teams",
-    style = {'width':'70%',
-             'display': 'block',
-             'margin-right': 'auto',
-             'margin-left': 'auto',
-
+    style = {'width':'50%',
+             'height': '100px',
+             "margin-top": '4%',
+             "margin-left": '2%'
              }),
 
         html.Div([
@@ -240,10 +330,8 @@ app.layout = html.Div([
         step=1
          )
     ], id = 'slider_div',
-        style ={'width':'70%',
-             'display': 'block',
-             'margin-right': 'auto',
-             'margin-left': 'auto',
+        style ={'width':'40%',
+             'margin-left':'80px',
              'border': '2px solid black',
              'borderRadius': '15px',
              'overflow': 'hidden',
@@ -252,21 +340,30 @@ app.layout = html.Div([
              'margin-bottom': '20px'
                 }),
 
+        html.Div([
+    html.H2('Number of accidents and collisions in F1 Races per country (1950-2022)', id='title_choropleth',
+                    style= {'margin-left': '52%'})
+        ],style= {"height" :'50px','margin-top':' 60px'}),
+
+
     html.Div([
+
+        html.Div([
+            dcc.Graph(figure=fig_accidents)
+        ], style={'width': '48%',
+                  'float':'right'}),
 
     dcc.Graph(
         id='team_stats_graph',
-        style = { 'display': 'block',
-                  'margin-right': 'auto',
-                  'margin-left': 'auto'}
+        style = { 'width': '48%',
+                'float':'left'}
     )
 
     ], id = 'teams_graph_div',
         style={
-            'border': '2px solid black',
             'borderRadius': '15px',
             'overflow': 'hidden',
-            'width': '90%',
+            'width': '95%',
             'display': 'block',
             'margin-right': 'auto',
             'margin-left': 'auto'
@@ -281,6 +378,12 @@ app.layout = html.Div([
 
 html.Div([
 
+    html.H1('Fastest Laps',style = {'display': 'block',
+           'margin-right': 'auto',
+           'margin-left': '38%'}),
+    html.H2('Choose a season and a circuit:',id ='title_season_circuit' ,style = {'display': 'block',
+           'margin-right': 'auto',
+           'margin-left': '30%'}),
     dcc.Dropdown(
         id='season_drop',
         options= seasons,
@@ -300,7 +403,7 @@ html.Div([
            'margin-right': 'auto',
            'margin-left': 'auto',
            'margin-top':'50px',
-           'margin-bottom':'150px',
+           'margin-bottom':'100px',
            'width': '50%'}
     ),
 
@@ -319,9 +422,6 @@ html.Div([
     )
     ]),
 
-   html.Div([
-        dcc.Graph(figure=fig_accidents)
-    ])
 
 
 ])
@@ -367,6 +467,8 @@ def update_driver_stats(driver):
     fig.update_layout(title_text=driver_name.iloc[0], title_x=0.5)
 
 
+
+
     fig.update_layout(
         xaxis=dict(
             showgrid=False,
@@ -374,11 +476,7 @@ def update_driver_stats(driver):
             showticklabels=False,
             zeroline=False,
             range=[0, 360],
-            tickfont=dict(
-                family ='Trebuchet MS',
-                size=13,
-                color='white',
-            ),
+
 
         ),
         yaxis=dict(
@@ -464,19 +562,26 @@ def update_team_stats_graph(team_a,team_b,option,year):
     if option == 'Points':
         team_stats = newResults_filtered.loc[(newResults['constructorId'] == team_a) | (newResults_filtered['constructorId'] == team_b)].groupby(by=['year', 'constructorName']).sum().reset_index()
         y = 'points'
+        title = "Points per Season"
     if option == 'PitStop':
         team_stats = newPitStops_filtered.loc[(newPitStops['seconds'] < 60) & ((newPitStops_filtered['constructorId'] == team_a) | (newPitStops_filtered['constructorId'] == team_b) )].groupby(by=['year', 'constructorName']).mean().reset_index()
         y = 'seconds'
+        title = "Average Pit Stop time"
+
 
     fig = px.line(team_stats,
                   x='year',
                   y= y,
                   color='constructorName',
-                  markers= True
+                  markers= True,
+                  title = title
                   )
 
     fig.layout.plot_bgcolor = 'rgb(18,19,20)'
     fig.layout.paper_bgcolor = 'rgb(18,19,20)'
+
+    fig.update_layout(hovermode="x unified")
+    fig.update_traces(mode="markers+lines", hovertemplate=None)
 
     fig.update_layout(
         xaxis=dict(
@@ -537,6 +642,9 @@ def update_season_circuit(season,circuit):
 
     fig.layout.plot_bgcolor = 'rgb(18,19,20)'
     fig.layout.paper_bgcolor = 'rgb(18,19,20)'
+
+    fig.update_traces(marker_color='rgba(222, 83, 83, 0.8)', marker_line_color='rgba(138, 8, 8, 0.8)',
+                      marker_line_width=1.5)
 
     fig.update_layout(
         xaxis=dict(
