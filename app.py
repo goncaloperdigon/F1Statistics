@@ -7,7 +7,7 @@ import dash
 from dash import dcc
 from dash import html
 import pandas as pd
-import base64
+#import base64
 import datetime as dt
 import plotly.express as px
 
@@ -96,12 +96,12 @@ results_status = pd.merge(results.loc[(results['statusId'] ==  3) | (results['st
 results_status = pd.merge(results_status,circuits,left_on='circuitId',right_index=True,how='left')
 results_status.rename(columns={'circuitCountry':'Country'},inplace = True)
 
-results_status['Country'].loc[results_status['Country'] == 'USA'] = 'United States'
+'''results_status['Country'].loc[results_status['Country'] == 'USA'] = 'United States'
 results_status['Country'].loc[results_status['Country'] == 'UAE'] = 'United Arab Emirates'
 results_status['Country'].loc[results_status['Country'] == 'UK'] = 'United Kingdom'
 results_status['Country'].loc[results_status['Country'] == 'Russia'] = 'Russian Federation'
 results_status['Country'].loc[results_status['Country'] == 'China'] = 'China, People\'s Republic of'
-results_status['Country'].loc[results_status['Country'] == 'Korea'] = 'Korea, Republic of (South)'
+results_status['Country'].loc[results_status['Country'] == 'Korea'] = 'Korea, Republic of (South)'''
 
 results_status_GP = results_status.groupby(['circuitLocation','Country']).count()
 results_status = results_status.groupby('Country').count()
@@ -182,8 +182,8 @@ fig_accidents.update_layout(margin={"r":10,"t":0,"l":10,"b":0},
 seasons = [dict(label=year, value=year1) for year, year1 in zip(newLapTimes['year'].sort_values().unique(), newLapTimes['year'].sort_values().unique())]
 circuits = [dict(label=name, value=id) for name, id in zip(newLapTimes['circuitLocation'].unique(), newLapTimes['circuitId'].unique())]
 
-encoded_image_avatar = base64.b64encode(open('images/avatar.png', 'rb').read())
-encoded_image_logo = base64.b64encode(open('images/f1_logo.png', 'rb').read())
+#encoded_image_avatar = base64.b64encode(open('images/avatar.png', 'rb').read())
+#encoded_image_logo = base64.b64encode(open('images/f1_logo.png', 'rb').read())
 
 
 #INTERACTIVE PARTS
@@ -197,7 +197,7 @@ app.layout = html.Div([
 
        html.Div([
 
-           html.Img(src='data:image/png;base64,{}'.format(encoded_image_logo.decode()), id='logo'),
+           #html.Img(src='data:image/png;base64,{}'.format(encoded_image_logo.decode()), id='logo'),
 
 
         ], id = 'div_title'),
@@ -217,7 +217,7 @@ app.layout = html.Div([
     ),
 
        html.Div([
-        html.Img(src='data:image/png;base64,{}'.format(encoded_image_avatar.decode()), id='avatar'),
+        #html.Img(src='data:image/png;base64,{}'.format(encoded_image_avatar.decode()), id='avatar'),
        ], id = "img_div"),
 
        html.Div([
