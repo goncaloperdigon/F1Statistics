@@ -71,12 +71,12 @@ results_status = pd.merge(results.loc[(results['statusId'] ==  3) | (results['st
 results_status = pd.merge(results_status,circuits,left_on='circuitId',right_index=True,how='left')
 results_status.rename(columns={'circuitCountry':'Country'},inplace = True)
 
-'''results_status['Country'].loc[results_status['Country'] == 'USA'] = 'United States'
+results_status['Country'].loc[results_status['Country'] == 'USA'] = 'United States'
 results_status['Country'].loc[results_status['Country'] == 'UAE'] = 'United Arab Emirates'
 results_status['Country'].loc[results_status['Country'] == 'UK'] = 'United Kingdom'
 results_status['Country'].loc[results_status['Country'] == 'Russia'] = 'Russian Federation'
 results_status['Country'].loc[results_status['Country'] == 'China'] = 'China, People\'s Republic of'
-results_status['Country'].loc[results_status['Country'] == 'Korea'] = 'Korea, Republic of (South)'''
+results_status['Country'].loc[results_status['Country'] == 'Korea'] = 'Korea, Republic of (South)'
 
 results_status_GP = results_status.groupby(['circuitLocation','Country']).count()
 results_status = results_status.groupby('Country').count()
