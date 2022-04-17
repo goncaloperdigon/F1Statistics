@@ -6,7 +6,6 @@ import pandas as pd
 import base64
 import datetime as dt
 import plotly.express as px
-
 from dash.dependencies import Input, Output
 import numpy as np
 import plotly.graph_objects as go
@@ -44,26 +43,6 @@ pitStops['seconds'] = pitStops['milliseconds'].apply(lambda x: x/1000)
 results['seconds'] = results['milliseconds'].apply(lambda x: x/1000)
 
 
-
-# Visualizaçoes que vamos fazer
-# por circuito:
-#    volta mais rapida
-#    average lap time over the years
-#    pilotos com mais vitorias 
-#    equipas com mais vitorias
-#    pit stop mais rapido (equipa)
-#    average pit stop time over the years
-# por season
-#    vencedor (equipa e piloto)
-#    mais vitorias (equipa e piloto)
-#    mais pole positions (equipa e piloto)
-#    pit stop mais rapido (equipa)
-# pilotos com mais vitorias e campeonatos
-# equipas com mais vitorias e campeonatos
-# por piloto
-# pistas com mais acidentes (fazer um cloropleth - cada pista (em cada pais) tem uma cor consoante a seu numero de adicentes
-     
-
 #DADOS
 fullnames = drivers['forename'] + str(" ") + drivers['surname']
 pilot_names = [dict(label=fullname, value=driver_id) for fullname, driver_id in zip(fullnames, drivers.index)]
@@ -92,12 +71,12 @@ results_status = pd.merge(results.loc[(results['statusId'] ==  3) | (results['st
 results_status = pd.merge(results_status,circuits,left_on='circuitId',right_index=True,how='left')
 results_status.rename(columns={'circuitCountry':'Country'},inplace = True)
 
-results_status['Country'].loc[results_status['Country'] == 'USA'] = 'United States'
+'''results_status['Country'].loc[results_status['Country'] == 'USA'] = 'United States'
 results_status['Country'].loc[results_status['Country'] == 'UAE'] = 'United Arab Emirates'
 results_status['Country'].loc[results_status['Country'] == 'UK'] = 'United Kingdom'
 results_status['Country'].loc[results_status['Country'] == 'Russia'] = 'Russian Federation'
 results_status['Country'].loc[results_status['Country'] == 'China'] = 'China, People\'s Republic of'
-results_status['Country'].loc[results_status['Country'] == 'Korea'] = 'Korea, Republic of (South)'
+results_status['Country'].loc[results_status['Country'] == 'Korea'] = 'Korea, Republic of (South)'''
 
 results_status_GP = results_status.groupby(['circuitLocation','Country']).count()
 results_status = results_status.groupby('Country').count()
